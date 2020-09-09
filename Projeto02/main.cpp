@@ -22,18 +22,45 @@ void desenha(void) {
 
     glColor3ub( 255, 255, 255 );
 
+    /*
+     * Desenhar nome utilizando Linhas
+     *
+     * A L E X A N D R E
+     *
+     * Começar pela letra A do meio
+     */
+
+    // Letra X
+    glBegin(GL_LINE_STRIP);
+            glVertex2f(-1.5, 2.0);
+            glVertex2f(-0.5, 0.0);
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+            glVertex2f(-1.5, 0.0);
+            glVertex2f(-0.5, 2.0);
+    glEnd();
+
     // Letra A
     glBegin(GL_LINE_STRIP);
             glVertex2f(-0.5, 0.00);
-            glVertex2f(0, 2);
-            glVertex2f(0, 2);
-            glVertex2f(0.5, 0);
+            glVertex2f(0.0, 2.0);
+            glVertex2f(0.0, 2.0);
+            glVertex2f(0.5, 0.0);
     glEnd();
 
     // Traço da Letra A
     glBegin(GL_LINE_STRIP);
             glVertex2f(-0.3, 0.75);
             glVertex2f(0.3, 0.75);
+    glEnd();
+
+    // Letra N
+    glBegin(GL_LINE_STRIP);
+            glVertex2f(0.5, 0.0);
+            glVertex2f(0.5, 2.0);
+            glVertex2f(1.5, 0.0);
+            glVertex2f(1.5, 2.0);
     glEnd();
 
     glFlush();
