@@ -20,25 +20,35 @@ void desenha(void) {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glBegin(GL_TRIANGLES);
-        glColor3f(0, 1, 0);
-        glVertex2f(-2, 0);
-        glVertex2f(2, 0);
-        glColor3f(1, 0, 0);
-        glVertex2f(0, 2);
+    glColor3ub( 255, 255, 255 );
+
+    // Letra A
+    glBegin(GL_LINE_STRIP);
+            glVertex2f(-0.5, 0.00);
+            glVertex2f(0, 2);
+            glVertex2f(0, 2);
+            glVertex2f(0.5, 0);
+    glEnd();
+
+    // Traço da Letra A
+    glBegin(GL_LINE_STRIP);
+            glVertex2f(-0.3, 0.75);
+            glVertex2f(0.3, 0.75);
     glEnd();
 
     glFlush();
 }
 
-void listeningKey(unsigned char tecla, GLint x, GLint y) {
+void listeningKey(unsigned char tecla, GLint x, GLint y)
+{
     switch(tecla) {
         case '+':
             escala++;
         break;
 
         case '-':
-            escala--;
+            if (escala > 0)
+                escala--;
         break;
     }
     desenha();
@@ -48,7 +58,7 @@ int main(int argc, char *argv[])
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowSize(800, 600);
+    glutInitWindowSize(1024, 768);
     glutInitWindowPosition(300, 100);
     glutCreateWindow("Ola Glut");
 
