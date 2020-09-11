@@ -76,7 +76,7 @@ void desenha(void) {
     glBegin(GL_LINE_STRIP);
             glVertex2f(-3.5, 2.0);
             glVertex2f(-3.5, 0.0);
-            glVertex2f(-2.5, 0.0);
+            glVertex2f(-2.6, 0.0);
     glEnd();
 
     // Letra E
@@ -87,17 +87,17 @@ void desenha(void) {
 
     glBegin(GL_LINE_STRIP);
             glVertex2f(-2.5, 2.0);
-            glVertex2f(-1.5, 2.0);
+            glVertex2f(-1.6, 2.0);
     glEnd();
 
     glBegin(GL_LINE_STRIP);
             glVertex2f(-2.5, 1.0);
-            glVertex2f(-1.5, 1.0);
+            glVertex2f(-1.9, 1.0);
     glEnd();
 
     glBegin(GL_LINE_STRIP);
             glVertex2f(-2.5, 0.0);
-            glVertex2f(-1.5, 0.0);
+            glVertex2f(-1.6, 0.0);
     glEnd();
 
     // Letra X
@@ -134,7 +134,29 @@ void desenha(void) {
     glEnd();
 
     // Letra D
-    DrawArc(0.89, 1, 1.17, -45, 2.048, 50);
+    //DrawArc(0.89, 1, 1.17, -45, 2.048, 50);
+    DrawArc(1.57, 1.2, 0.8, -44.0, 2.0, 50);
+    DrawArc(1.57, 0.8, 0.8, -45.96, 2.0, 50);
+
+    // Letra R
+    glBegin(GL_LINE_STRIP);
+            glVertex2f(2.5, 2.0);
+            glVertex2f(2.5, 0.0);
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+            glVertex2f(2.5, 1.0);
+            glVertex2f(3.5, 0.0);
+    glEnd();
+
+    // DrawArc(2.2, 1.49, 0.6, -45, 2.048, 50);
+    DrawArc(2.8, 1.48, 0.6, -43.94, 2.048, 50);
+    DrawArc(2.8, 1.51, 0.6, -46, 2.048, 50);
+
+    glBegin(GL_LINE_STRIP);
+            glVertex2f(2.38, 1.2);
+            glVertex2f(2.38, 0.8);
+    glEnd();
 
     glFlush();
 }
