@@ -92,7 +92,7 @@ void desenha(void) {
 
     glBegin(GL_LINE_STRIP);
             glVertex2f(-2.5, 1.0);
-            glVertex2f(-1.9, 1.0);
+            glVertex2f(-2.0, 1.0);
     glEnd();
 
     glBegin(GL_LINE_STRIP);
@@ -156,6 +156,27 @@ void desenha(void) {
     glBegin(GL_LINE_STRIP);
             glVertex2f(2.38, 1.2);
             glVertex2f(2.38, 0.8);
+    glEnd();
+
+    // Letra E
+    glBegin(GL_LINE_STRIP);
+            glVertex2f(3.5, 2.0);
+            glVertex2f(3.5, 0.0);
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+            glVertex2f(3.5, 2.0);
+            glVertex2f(4.4, 2.0);
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+            glVertex2f(3.5, 1.0);
+            glVertex2f(4.0, 1.0);
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+            glVertex2f(3.5, 0.0);
+            glVertex2f(4.4, 0.0);
     glEnd();
 
     glFlush();
