@@ -44,7 +44,7 @@ void desenha(void) {
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-6, 6, -6, 6);
+    gluOrtho2D(-20, 20, -20, 20);
 
     // Escala
     glScalef(escala, escala, 0);
