@@ -5,9 +5,11 @@
 #endif
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <cmath>
 
 GLfloat escala = 1;
+GLfloat rotacao = 0;
 
 void DrawArc(float cx, float cy, float r, float start_angle, float arc_angle, int num_segments)
 {
@@ -44,6 +46,8 @@ void desenha(void) {
     gluOrtho2D(-6, 6, -6, 6);
 
     glScalef(escala, escala, 0);
+
+    glRotatef(rotacao, 1, 1, 1);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -193,6 +197,14 @@ void listeningKey(unsigned char tecla, GLint x, GLint y)
             if (escala > 0)
                 escala--;
         break;
+
+        case 'q':
+            rotacao--;
+        break;
+
+        case 'e':
+            rotacao++;
+        break;
     }
     desenha();
 }
@@ -208,6 +220,11 @@ int main(int argc, char *argv[])
     glutKeyboardFunc(listeningKey);
 
     glutDisplayFunc(desenha);
+
+    printf("\n\nTrabalho 2 - Implementacao sobre Transformacoes Afins em Open GL\n\n");
+    printf("Comandos:\n\n");
+    printf("Rotacao     - [Q] [E]\n");
+    printf("Escalamento - [-] [+]\n");
 
     //glClearColor(1,1,1,1);
 
