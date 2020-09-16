@@ -10,6 +10,7 @@
 
 GLfloat escala = 1;
 GLfloat rotacao = 0;
+GLfloat translacao = 0;
 
 void DrawArc(float cx, float cy, float r, float start_angle, float arc_angle, int num_segments)
 {
@@ -45,9 +46,14 @@ void desenha(void) {
     glLoadIdentity();
     gluOrtho2D(-6, 6, -6, 6);
 
+    // Escala
     glScalef(escala, escala, 0);
 
+    // Rotacao
     glRotatef(rotacao, 1, 1, 1);
+
+    // Translacao
+    glTranslatef(translacao, translacao, 0);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -205,6 +211,15 @@ void listeningKey(unsigned char tecla, GLint x, GLint y)
         case 'e':
             rotacao++;
         break;
+
+        case 'a':
+            translacao--;
+        break;
+
+        case 'd':
+            translacao++;
+        break;
+
     }
     desenha();
 }
@@ -225,6 +240,7 @@ int main(int argc, char *argv[])
     printf("Comandos:\n\n");
     printf("Rotacao     - [Q] [E]\n");
     printf("Escalamento - [-] [+]\n");
+    printf("Translacao  - [A] [D]\n");
 
     //glClearColor(1,1,1,1);
 
