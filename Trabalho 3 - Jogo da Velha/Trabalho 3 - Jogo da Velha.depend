@@ -1,0 +1,24 @@
+# depslib dependency file v1.0
+1601745259 source:c:\users\gw\documents\github\puc-materia-mod-3d\trabalho 3 - jogo da velha\main.cpp
+	<iostream>
+	<stdlib.h>
+	<math.h>
+	<time.h>
+	<string.h>
+	<GLUT/glut.h>
+	<GL/glut.h>
+
+1426360528 c:\users\gw\desktop\puc\mod 3d\glut\include\gl\glut.h
+	"freeglut_std.h"
+
+1426360528 c:\users\gw\desktop\puc\mod 3d\glut\include\gl\freeglut_std.h
+	<windows.h>
+	<EGL/egl.h>
+	<GLES/gl.h>
+	<GLES2/gl2.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdlib.h>
+

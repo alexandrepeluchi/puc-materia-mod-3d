@@ -1,177 +1,284 @@
-/*
- * GLUT Shapes Demo
- *
- * Written by Nigel Stewart November 2003
- *
- * This program is test harness for the sphere, cone
- * and torus shapes in GLUT.
- *
- * Spinning wireframe and smooth shaded shapes are
- * displayed until the ESC or q key is pressed.  The
- * number of geometry stacks and slices can be adjusted
- * using the + and - keys.
- */
-
+#include<iostream>
+#include<stdlib.h>
+#include<math.h>
+#include<time.h>
+#include<string.h>
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
 #include <GL/glut.h>
 #endif
 
-#include <stdlib.h>
+int matrix[3][3]; //this matrix stores the x and o and blank box of the game, a value of 0 is blank, 1 is x and 2 is o
+int playerturn; //playerturn if it is 1 then 1st players turn else if it is 2 then its second players turn
+int result; //result of the game if it is 0 then draw if it is 1 then player 1 wins if it is 2 then player 2 wins
+bool gameover; //gameover if it is 0 then its not game over else if it is 1 then its game over
 
-static int slices = 16;
-static int stacks = 16;
-
-/* GLUT callback Handlers */
-
-static void resize(int width, int height)
+//initialize the game
+void initgame()
 {
-    const float ar = (float) width / (float) height;
+	playerturn = 1; //x starts first
 
-    glViewport(0, 0, width, height);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glFrustum(-ar, ar, -1.0, 1.0, 2.0, 100.0);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity() ;
+	//clear the matrix
+	for(int i = 0; i <= 2; i++)
+	{
+		for(int j = 0; j <= 2; j++)
+		{
+			matrix[i][j] = 0;
+		}
+	}
 }
 
-static void display(void)
-{
-    const double t = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
-    const double a = t*90.0;
+//this function is called when keyboard button is pressed
+void KeyPress(unsigned char key, int x, int y ){
+    switch(key){
+		case 'y':
+			if(gameover == true)
+			{
+				gameover = false;
+				initgame();
+			}
+			break;
+		case 'n':
+			if(gameover == true)
+				exit(0);
+			break;
+		case 27:
+			exit(0);
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glColor3d(1,0,0);
-
-    glPushMatrix();
-        glTranslated(-2.4,1.2,-6);
-        glRotated(60,1,0,0);
-        glRotated(a,0,0,1);
-        glutSolidSphere(1,slices,stacks);
-    glPopMatrix();
-
-    glPushMatrix();
-        glTranslated(0,1.2,-6);
-        glRotated(60,1,0,0);
-        glRotated(a,0,0,1);
-        glutSolidCone(1,1,slices,stacks);
-    glPopMatrix();
-
-    glPushMatrix();
-        glTranslated(2.4,1.2,-6);
-        glRotated(60,1,0,0);
-        glRotated(a,0,0,1);
-        glutSolidTorus(0.2,0.8,slices,stacks);
-    glPopMatrix();
-
-    glPushMatrix();
-        glTranslated(-2.4,-1.2,-6);
-        glRotated(60,1,0,0);
-        glRotated(a,0,0,1);
-        glutWireSphere(1,slices,stacks);
-    glPopMatrix();
-
-    glPushMatrix();
-        glTranslated(0,-1.2,-6);
-        glRotated(60,1,0,0);
-        glRotated(a,0,0,1);
-        glutWireCone(1,1,slices,stacks);
-    glPopMatrix();
-
-    glPushMatrix();
-        glTranslated(2.4,-1.2,-6);
-        glRotated(60,1,0,0);
-        glRotated(a,0,0,1);
-        glutWireTorus(0.2,0.8,slices,stacks);
-    glPopMatrix();
-
-    glutSwapBuffers();
+	}
 }
 
-
-static void key(unsigned char key, int x, int y)
+//This function is called when the mouse button is pressed and this function puts the x or o on the blank box
+void click(int button, int state, int x, int y)
 {
-    switch (key)
-    {
-        case 27 :
-        case 'q':
-            exit(0);
+	if(gameover == false && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	{
+		if(playerturn == 1)
+		{
+			if(matrix[(y - 100) / 200][x / 200] == 0)
+			{
+				matrix[(y - 100) / 200][x / 200] = 1;
+				playerturn = 2;
+			}
+		}
+		else
+		{
+			if(matrix[(y - 100) / 200][x / 200] == 0)
+			{
+				matrix[(y - 100) / 200][x / 200] = 2;
+				playerturn = 1;
+			}
+		}
+	}
+}
+
+//Used to write text in the opengl window
+void drawString (void * font, char *s, float x, float y){
+    unsigned int i;
+    glRasterPos2f(x, y);
+    for (i = 0; i < strlen (s); i++)
+        glutBitmapCharacter (font, s[i]);
+}
+
+//This function is used to draw the 4 lines 2 vertical and 2 horizontal
+void drawlines()
+{
+	glBegin(GL_LINES);
+    glColor3f(0, 0, 0);
+    //2 vertical lines
+    glVertex2f(200, 100);
+    glVertex2f(200, 680);
+    glVertex2f(400, 680);
+    glVertex2f(400, 100);
+    //2 horizontal lines
+    glVertex2f(0, 300);
+    glVertex2f(600, 300);
+    glVertex2f(0, 500);
+    glVertex2f(600, 500);
+	glEnd();
+}
+
+//This Function Draw the x and o's
+void drawxo()
+{
+	for(int i = 0; i <= 2; i++)
+	{
+		for(int j = 0; j <= 2; j++)
+		{
+			if(matrix[i][j] == 1) //if it is 1 then draw x
+			{
+				glBegin(GL_LINES);
+                glVertex2f(100 + j * 200 - 50, 200 + i * 200 - 50);
+                glVertex2f(100 + j * 200 + 50, 200 + i * 200 + 50);
+                glVertex2f(100 + j * 200 - 50, 200 + i * 200 + 50);
+                glVertex2f(100 + j * 200 + 50, 200 + i * 200 - 50);
+				glEnd();
+			}
+			else if(matrix[i][j] == 2) //if it is 2 then draw o
+			{
+				glBegin(GL_LINE_LOOP);
+                glVertex2f(100 + j * 200 - 50, 200 + i * 200 - 50);
+                glVertex2f(100 + j * 200 - 50, 200 + i * 200 + 50);
+                glVertex2f(100 + j * 200 + 50, 200 + i * 200 + 50);
+                glVertex2f(100 + j * 200 + 50, 200 + i * 200 - 50);
+				glEnd();
+			}
+		}
+	}
+}
+
+//This function checks if there is any winner
+bool checkifwin()
+{
+	int i, j;
+
+	//check if there are horizontal win i.e if there is any row that has same value
+	for(i = 0; i <= 2; i++)
+	{
+		for(j = 1; j <= 2; j++)
+		{
+			if(matrix[i][0] != 0 && matrix[i][0] == matrix[i][j])
+			{
+				if(j == 2)
+					return true;
+			}
+			else
+				break;
+		}
+	}
+
+	//check if there are vertical win i.e if there is any column that has same value
+	for(i = 0; i <= 2; i++)
+	{
+		for(j = 1; j <= 2; j++)
+		{
+			if(matrix[0][i] != 0 && matrix[0][i] == matrix[j][i])
+			{
+				if(j == 2)
+					return true;
+			}
+			else
+				break;
+		}
+	}
+
+	//check if there is any diagonal win i.e. if there is any diagonals that has same value
+	for(i = 1; i <= 2; i++)
+	{
+		if(matrix[0][0] != 0 && matrix[0][0] == matrix[i][i])
+		{
+			if(i == 2)
+				return true;
+		}
+		else
             break;
-
-        case '+':
-            slices++;
-            stacks++;
+	}
+	for(i = 1; i <= 2; i++)
+	{
+		if(matrix[2][0] != 0 && matrix[2][0] == matrix[2 - i][i])
+		{
+			if(i == 2)
+				return true;
+		}
+		else
             break;
-
-        case '-':
-            if (slices>3 && stacks>3)
-            {
-                slices--;
-                stacks--;
-            }
-            break;
-    }
-
-    glutPostRedisplay();
+	}
 }
 
-static void idle(void)
+//This function checks if the match is a draw i.e it returns false if there is atleast one empty box else returns true
+bool checkifdraw()
 {
-    glutPostRedisplay();
+	int i, j;
+	bool draw;
+
+	for(i = 0; i <= 2; i++)
+	{
+		for(j = 0; j <= 2; j++)
+		{
+			if(matrix[i][j] == 0)
+				return false;
+		}
+	}
+	return true;
 }
 
-const GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
-const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
-const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-const GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
-
-const GLfloat mat_ambient[]    = { 0.7f, 0.7f, 0.7f, 1.0f };
-const GLfloat mat_diffuse[]    = { 0.8f, 0.8f, 0.8f, 1.0f };
-const GLfloat mat_specular[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
-const GLfloat high_shininess[] = { 100.0f };
-
-/* Program entry point */
-
-int main(int argc, char *argv[])
+//This is the idle call back function
+void display()
 {
-    glutInit(&argc, argv);
-    glutInitWindowSize(640,480);
-    glutInitWindowPosition(10,10);
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(1, 1, 1, 1);
+	glColor3f(0, 0, 0);
+	if(playerturn == 1)
+		drawString(GLUT_BITMAP_HELVETICA_18, "Player1's turn", 100, 30);
+	else
+		drawString(GLUT_BITMAP_HELVETICA_18, "Player2's turn", 100, 30);
 
-    glutCreateWindow("GLUT Shapes");
+	drawlines();
+	drawxo();
 
-    glutReshapeFunc(resize);
-    glutDisplayFunc(display);
-    glutKeyboardFunc(key);
-    glutIdleFunc(idle);
+	if(checkifwin() == true)
+	{
+		//the player who made the previous move is the winner
+		if(playerturn == 1)
+		{
+			gameover = true;
+			result = 2; //player2 wins
+		}
+		else
+		{
+			gameover = true;
+			result = 1; //player1 wins
+		}
+	}
+	else if(checkifdraw() == true)
+	{
+		gameover = true;
+		result = 0;
+	}
 
-    glClearColor(1,1,1,1);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+	if(gameover == true)
+	{
+		drawString(GLUT_BITMAP_HELVETICA_18, "Game Over", 100, 160);
 
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
+		if(result == 0)
+			drawString(GLUT_BITMAP_HELVETICA_18, "Its a draw", 110, 185);
 
-    glEnable(GL_LIGHT0);
-    glEnable(GL_NORMALIZE);
-    glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_LIGHTING);
+		if(result == 1)
+			drawString(GLUT_BITMAP_HELVETICA_18, "Player1 wins", 95, 185);
 
-    glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+		if(result == 2)
+			drawString(GLUT_BITMAP_HELVETICA_18, "Player2 wins", 95, 185);
 
-    glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
-    glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
+		drawString(GLUT_BITMAP_HELVETICA_18, "Do you want to continue (y/n)", 40, 210);
+	}
 
+	glutSwapBuffers();
+}
+
+//This function is called on windows resize
+void reshape(int x, int y)
+{
+	glViewport(0, 0, x, y);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, x, y, 0, 0, 1);
+	glMatrixMode(GL_MODELVIEW);
+}
+
+//main function of the program
+int main(int argc, char **argv)
+{
+	initgame();
+	glutInit(&argc,argv);
+	glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE);
+	glutInitWindowPosition(100,100);
+	glutInitWindowSize(600, 700);
+	glutCreateWindow("Trabalho 3 - Jogo da Velha");
+	glutReshapeFunc(reshape);
+	glutDisplayFunc(display);
+	glutKeyboardFunc(KeyPress);
+	glutMouseFunc(click);
+	glutIdleFunc(display);
     glutMainLoop();
-
-    return EXIT_SUCCESS;
 }
