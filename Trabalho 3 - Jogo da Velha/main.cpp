@@ -3,6 +3,7 @@
 #include <math.h>
 #include <time.h>
 #include <string.h>
+#include <stdio.h>
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
@@ -23,6 +24,7 @@ void IniciaJogo()
 	{
 		for (int j = 0; j <= 2; j++)
 		{
+		    Sleep(50);
 			matriz[i][j] = 0;
 		}
 	}
@@ -156,6 +158,56 @@ void DesenhaXeO()
 bool VerificaVitoria()
 {
 	int i, j;
+    int contadorX = 0, contadorO = 0;
+
+	for (i = 0; i <= 2; i++)
+	{
+		for (j = 1; j <= 2; j++)
+		{
+			if (matriz[i][0] != 0 && matriz[i][0] == matriz[i][j])
+			{
+				if (j == 2)
+					return true;
+			}
+			else
+				break;
+		}
+	}
+
+	for (i = 0; i <= 2; i++)
+	{
+		for (j = 1; j <= 2; j++)
+		{
+			if (matriz[0][i] != 0 && matriz[0][i] == matriz[j][i])
+			{
+				if (j == 2)
+					return true;
+			}
+			else
+				break;
+		}
+	}
+
+	for (i = 1; i <= 2; i++)
+	{
+		if (matriz[0][0] != 0 && matriz[0][0] == matriz[i][i])
+		{
+			if (i == 2)
+				return true;
+		}
+		else
+			break;
+	}
+	for (i = 1; i <= 2; i++)
+	{
+		if (matriz[2][0] != 0 && matriz[2][0] == matriz[2 - i][i])
+		{
+			if (i == 2)
+				return true;
+		}
+		else
+			break;
+	}
 }
 
 bool VerificaEmpate()
