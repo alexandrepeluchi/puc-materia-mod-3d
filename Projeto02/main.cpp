@@ -39,6 +39,22 @@ void DrawArc(float cx, float cy, float r, float start_angle, float arc_angle, in
 	glEnd();
 }
 
+void DrawCircle(float cx, float cy, float r, int num_segments)
+{
+	glBegin(GL_LINE_LOOP);
+	for(int ii = 0; ii < num_segments; ii++)
+	{
+		float theta = 2.0f * 3.1415926f * float(ii) / float(num_segments);//get the current angle
+
+		float x = r * cosf(theta);//calculate the x component
+		float y = r * sinf(theta);//calculate the y component
+
+		glVertex2f(x + cx, y + cy);//output vertex
+
+	}
+	glEnd();
+}
+
 void desenha(void) {
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -59,6 +75,8 @@ void desenha(void) {
     glLoadIdentity();
 
     glColor3ub( 255, 255, 255 );
+
+    DrawCircle(3, 3, 1, 50);
 
     /*
      * Desenhar nome utilizando Linhas

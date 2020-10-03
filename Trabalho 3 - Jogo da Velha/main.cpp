@@ -9,10 +9,10 @@
 #include <GL/glut.h>
 #endif
 
-int matrix[3][3]; //this matrix stores the x and o and blank box of the game, a value of 0 is blank, 1 is x and 2 is o
-int playerturn; //playerturn if it is 1 then 1st players turn else if it is 2 then its second players turn
-int result; //result of the game if it is 0 then draw if it is 1 then player 1 wins if it is 2 then player 2 wins
-bool gameover; //gameover if it is 0 then its not game over else if it is 1 then its game over
+int matrix[3][3];
+int playerturn;
+int result;
+bool gameover;
 
 //initialize the game
 void initgame()
@@ -32,7 +32,7 @@ void initgame()
 //this function is called when keyboard button is pressed
 void KeyPress(unsigned char key, int x, int y ){
     switch(key){
-		case 'y':
+		case 's':
 			if(gameover == true)
 			{
 				gameover = false;
@@ -81,11 +81,49 @@ void drawString (void * font, char *s, float x, float y){
         glutBitmapCharacter (font, s[i]);
 }
 
+
+
+void DrawCircle(float cx, float cy, float r, int num_segments)
+{
+	float theta = 2 * 3.1415926 / float(num_segments);
+	float tangetial_factor = tanf(theta);//calculate the tangential factor
+
+	float radial_factor = cosf(theta);//calculate the radial factor
+
+	float x = r;//we start at angle = 0
+
+	float y = 0;
+
+	glBegin(GL_LINE_LOOP);
+	for(int ii = 0; ii < num_segments; ii++)
+	{
+		glVertex2f(x + cx, y + cy);//output vertex
+
+		//calculate the tangential vector
+		//remember, the radial vector is (x, y)
+		//to get the tangential vector we flip those coordinates and negate one of them
+
+		float tx = -y;
+		float ty = x;
+
+		//add the tangential vector
+
+		x += tx * tangetial_factor;
+		y += ty * tangetial_factor;
+
+		//correct using the radial factor
+
+		x *= radial_factor;
+		y *= radial_factor;
+	}
+	glEnd();
+}
+
 //This function is used to draw the 4 lines 2 vertical and 2 horizontal
 void drawlines()
 {
 	glBegin(GL_LINES);
-    glColor3f(0, 0, 0);
+    glColor3ub( 255, 255, 255 );
     //2 vertical lines
     glVertex2f(200, 100);
     glVertex2f(200, 680);
@@ -117,12 +155,8 @@ void drawxo()
 			}
 			else if(matrix[i][j] == 2) //if it is 2 then draw o
 			{
-				glBegin(GL_LINE_LOOP);
-                glVertex2f(100 + j * 200 - 50, 200 + i * 200 - 50);
-                glVertex2f(100 + j * 200 - 50, 200 + i * 200 + 50);
-                glVertex2f(100 + j * 200 + 50, 200 + i * 200 + 50);
-                glVertex2f(100 + j * 200 + 50, 200 + i * 200 - 50);
-				glEnd();
+				glColor3ub( 255, 255, 255 );
+                DrawCircle(100 + j * 200, 200 + i * 200, 70, 50);
 			}
 		}
 	}
@@ -207,12 +241,13 @@ bool checkifdraw()
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-	glClearColor(1, 1, 1, 1);
-	glColor3f(0, 0, 0);
+	glClearColor(0, 0, 0, 0);
+	glColor3f(1, 1, 1);
+	glColor3ub( 255, 255, 255 );
 	if(playerturn == 1)
-		drawString(GLUT_BITMAP_HELVETICA_18, "Player1's turn", 100, 30);
+		drawString(GLUT_BITMAP_HELVETICA_18, "Vez do Jogador 1", 230, 60);
 	else
-		drawString(GLUT_BITMAP_HELVETICA_18, "Player2's turn", 100, 30);
+		drawString(GLUT_BITMAP_HELVETICA_18, "Vez do Jogador 2", 230, 60);
 
 	drawlines();
 	drawxo();
@@ -239,18 +274,18 @@ void display()
 
 	if(gameover == true)
 	{
-		drawString(GLUT_BITMAP_HELVETICA_18, "Game Over", 100, 160);
+		drawString(GLUT_BITMAP_HELVETICA_18, "Fim de Jogo", 250, 330);
 
 		if(result == 0)
-			drawString(GLUT_BITMAP_HELVETICA_18, "Its a draw", 110, 185);
+			drawString(GLUT_BITMAP_HELVETICA_18, "Ocorreu um Empate!", 220, 405);
 
 		if(result == 1)
-			drawString(GLUT_BITMAP_HELVETICA_18, "Player1 wins", 95, 185);
+			drawString(GLUT_BITMAP_HELVETICA_18, "Jogador 1 Venceu!!!", 215, 405);
 
 		if(result == 2)
-			drawString(GLUT_BITMAP_HELVETICA_18, "Player2 wins", 95, 185);
+			drawString(GLUT_BITMAP_HELVETICA_18, "Jogador 2 Venceu!!!", 215, 405);
 
-		drawString(GLUT_BITMAP_HELVETICA_18, "Do you want to continue (y/n)", 40, 210);
+		drawString(GLUT_BITMAP_HELVETICA_18, "Continuar? (s/n)", 235, 480);
 	}
 
 	glutSwapBuffers();
