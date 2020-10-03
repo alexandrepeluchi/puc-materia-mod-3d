@@ -156,71 +156,29 @@ void DesenhaXeO()
 bool VerificaVitoria()
 {
 	int i, j;
-
-	for (i = 0; i <= 2; i++)
-	{
-		for (j = 1; j <= 2; j++)
-		{
-			if (matriz[i][0] != 0 && matriz[i][0] == matriz[i][j])
-			{
-				if (j == 2)
-					return true;
-			}
-			else
-				break;
-		}
-	}
-
-	for (i = 0; i <= 2; i++)
-	{
-		for (j = 1; j <= 2; j++)
-		{
-			if (matriz[0][i] != 0 && matriz[0][i] == matriz[j][i])
-			{
-				if (j == 2)
-					return true;
-			}
-			else
-				break;
-		}
-	}
-
-	for (i = 1; i <= 2; i++)
-	{
-		if (matriz[0][0] != 0 && matriz[0][0] == matriz[i][i])
-		{
-			if (i == 2)
-				return true;
-		}
-		else
-			break;
-	}
-	for (i = 1; i <= 2; i++)
-	{
-		if (matriz[2][0] != 0 && matriz[2][0] == matriz[2 - i][i])
-		{
-			if (i == 2)
-				return true;
-		}
-		else
-			break;
-	}
 }
 
 bool VerificaEmpate()
 {
 	int i, j;
 	bool draw;
+	int contador;
 
-	for (i = 0; i <= 2; i++)
+    contador = 0;
+	for (i = 0; i < 3; i++)
 	{
-		for (j = 0; j <= 2; j++)
+		for (j = 0; j < 3; j++)
 		{
-			if (matriz[i][j] == 0)
-				return false;
+			if (matriz[i][j] != 0) {
+                Sleep(10);
+                contador++;
+			}
 		}
 	}
-	return true;
+
+	if (contador == 9) {
+        return true;
+	}
 }
 
 void display()
